@@ -29,9 +29,11 @@ def execute_r_instruction(instruction, registers):
             registers[rd] = registers[rs] | registers[rt]
         if opcode == 'xor':
             registers[rd] = registers[rs] ^ registers[rt]
+        if opcode == 'mul':
+            registers[rd] = registers[rs] * registers[rt]
 
     if opcode in ['sll', 'srl', 'sra']:
-        rd, rt, sh = map(int, list(instruction)[1:])
+        rd, rt, sh = map(eval, list(instruction)[1:])
 
         if opcode == 'sll':
             registers[rd] = registers[rt] << sh
