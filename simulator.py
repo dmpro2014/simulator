@@ -89,7 +89,7 @@ data = ""
 for i in range(256):
     data += '{' + ' '.join(map(
         convert_color,
-        memory_dump(i, i + WIDTH)
+        memory_dump(i*WIDTH, i*WIDTH + WIDTH)
     )) + '} '
 img.put(data[:-1])
 
