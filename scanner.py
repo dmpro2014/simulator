@@ -25,11 +25,11 @@ def scan(input):
 
         instruction_format = get_instruction_format(opcode)
 
-        encoded_instruction = ['nop']
+        instruction_tokens = ['nop']
         if instruction_format == 'r':
-            encoded_instruction = parse_r_type(opcode, line)
+            instruction_tokens = parse_r_type(opcode, line)
         if instruction_format == 'i':
-            encoded_instruction = parse_i_type(opcode, line)
+            instruction_tokens = parse_i_type(opcode, line)
 
-        instructions.append(encoded_instruction)
+        instructions.append(list(instruction_tokens) + [line])
     return instructions
