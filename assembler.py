@@ -47,6 +47,9 @@ for instruction_tokens in instructions:
     if instruction_format == 'r':
         encoded_instruction = parse_r_instruction(instruction_tokens)
 
+    if instruction_tokens[-2]:  # Mask
+        encoded_instruction += (1 << 31)
+
     program.append('X"{:08x}", -- {}'.format(encoded_instruction, instruction_tokens[-1]))
 
 

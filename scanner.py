@@ -21,15 +21,19 @@ def parse_i_type(opcode, line):
 def scan(input):
     instructions = []
     for line in input:
-        opcode = line.strip().split(" ")[0]
+        comment_index = line.find(';')
+        bare_line = line.replace('?', '')[0:comment_index].strip()
+        opcode = bare_line.split(" ")[0]
+
+        masked = line[0] == '?'
 
         instruction_format = get_instruction_format(opcode)
 
         instruction_tokens = ['nop']
         if instruction_format == 'r':
-            instruction_tokens = parse_r_type(opcode, line)
+            instruction_tokens = parse_r_type(opcode, bare_line)
         if instruction_format == 'i':
-            instruction_tokens = parse_i_type(opcode, line)
+            instruction_tokens = parse_i_type(opcode, bare_line)
 
-        instructions.append(list(instruction_tokens) + [line])
+        instructions.append(list(instruction_tokens) + [masked, line])
     return instructions
