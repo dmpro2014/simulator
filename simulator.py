@@ -16,8 +16,8 @@ num_threads = WIDTH * HEIGHT
 def execute_r_instruction(instruction, registers):
     opcode = instruction[0]
 
-    if opcode in ['add', 'sub', 'and', 'or', 'xor']:
-        rd, rs, rt = map(eval, list(instruction)[1:])
+    if opcode in ['add', 'sub', 'and', 'or', 'xor', 'mul', 'slt']:
+        rd, rs, rt = map(eval, list(instruction)[1:4])
 
         if opcode == 'add':
             registers[rd] = registers[rs] + registers[rt]
@@ -31,9 +31,12 @@ def execute_r_instruction(instruction, registers):
             registers[rd] = registers[rs] ^ registers[rt]
         if opcode == 'mul':
             registers[rd] = registers[rs] * registers[rt]
+        if opcode == 'slt':
+            # print 'slt', registers[rs], registers[rt]
+            registers[rd] = registers[rs] < registers[rt]
 
     if opcode in ['sll', 'srl', 'sra']:
-        rd, rt, sh = map(eval, list(instruction)[1:])
+        rd, rt, sh = map(eval, list(instruction)[1:4])
 
         if opcode == 'sll':
             registers[rd] = registers[rt] << sh
@@ -51,10 +54,10 @@ def execute_i_instruction(instruction, registers):
     if opcode == 'lw':
         registers[5] = memory_read(registers[3], registers[4])
     if opcode == 'ldc':
-        rd, immediate = map(eval, list(instruction)[1:])
+        rd, immediate = map(eval, list(instruction)[1:3])
         registers[rd] = constant_memory[immediate]
     if opcode == 'addi':
-        rd, rs, immediate = map(eval, list(instruction)[1:])
+        rd, rs, immediate = map(eval, list(instruction)[1:4])
         registers[rd] = registers[rs] + immediate
 
 
@@ -63,6 +66,9 @@ for thread_id in range(num_threads):
     registers[1] = thread_id >> 16
     registers[2] = thread_id % 2**16
     for instruction in instructions:
+        if instruction[-2] and registers[6]:  # Mask
+            # print instruction[-1]
+            continue
         instruction_format = get_instruction_format(instruction[0])
 
         if instruction_format == 'i':
@@ -81,18 +87,24 @@ def convert_color(color):
     blue = blue << 3
     return "#%02x%02x%02x" % (red, green, blue)
 
-window = Tk()
-canvas = Canvas(window, width=WIDTH, height=HEIGHT, bg="#000000")
-canvas.pack()
-img = PhotoImage(width=WIDTH, height=HEIGHT)
-canvas.create_image((WIDTH/2, HEIGHT/2), image=img, state="normal")
 
-data = ""
-for i in range(256):
-    data += '{' + ' '.join(map(
-        convert_color,
-        memory_dump(i*WIDTH, i*WIDTH + WIDTH)
-    )) + '} '
-img.put(data[:-1])
+def display():
+    window = Tk()
+    canvas = Canvas(window, width=WIDTH, height=HEIGHT, bg="#000000")
+    canvas.pack()
+    img = PhotoImage(width=WIDTH, height=HEIGHT)
+    canvas.create_image((WIDTH/2, HEIGHT/2), image=img, state="normal")
 
-mainloop()
+    data = ""
+    for i in range(256):
+        data += '{' + ' '.join(map(
+            convert_color,
+            memory_dump(i*WIDTH, i*WIDTH + WIDTH)
+        )) + '} '
+    img.put(data[:-1])
+
+    mainloop()
+
+display()
+
+#print memory_dump(0, 100)

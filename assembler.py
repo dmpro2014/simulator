@@ -15,7 +15,7 @@ def parse_r_instruction(instruction_tokens):
         rd, rs, rt = map(eval, list(instruction_tokens)[1:4])
         sh = 0
 
-    if opcode in ['sll', 'srl', 'sra']:
+    if instruction in ['sll', 'srl', 'sra']:
         rd, rt, sh = map(eval, list(instruction_tokens)[1:4])
         rs = 0
 

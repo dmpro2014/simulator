@@ -7,7 +7,7 @@ opcodes = {
     }
 
 instruction_formats = {
-    'r': ['add', 'sub', 'and', 'or', 'xor', 'slt', 'sll', 'slr', 'sra'],
+    'r': ['add', 'sub', 'and', 'or', 'xor', 'slt', 'sll', 'srl', 'sra', 'mul'],
     'i': ['lw', 'sw', 'ldc', 'addi', 'thread_finished'],
     'nop': ['nop'],
     }

@@ -3,7 +3,7 @@ from utils import get_instruction_format
 
 
 def parse_r_type(opcode, line):
-    if opcode in ['add', 'sub', 'and', 'or', 'xor']:
+    if opcode in ['add', 'sub', 'and', 'or', 'xor', 'mul', 'slt']:
         return parse("{} ${}, ${}, ${}", line)
     if opcode in ['sll', 'srl', 'sra']:
         return parse("{} ${}, ${}, {}", line)
@@ -22,7 +22,7 @@ def scan(input):
     instructions = []
     for line in input:
         comment_index = line.find(';')
-        bare_line = line.replace('?', '')[0:comment_index].strip()
+        bare_line = line[0:comment_index].replace('?', '').strip()
         opcode = bare_line.split(" ")[0]
 
         masked = line[0] == '?'
