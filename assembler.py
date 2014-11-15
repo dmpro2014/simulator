@@ -11,7 +11,7 @@ def parse_r_instruction(instruction_tokens):
     alu_function = get_funct_code(instruction)
     opcode = 0
 
-    if instruction in ['add', 'sub', 'and', 'or', 'xor']:
+    if instruction in ['add', 'sub', 'and', 'or', 'xor', 'slt']:
         rd, rs, rt = map(eval, list(instruction_tokens)[1:4])
         sh = 0
 
