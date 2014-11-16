@@ -4,6 +4,22 @@ from utils import get_instruction_format, get_funct_code, get_opcode
 import argparse
 
 
+class OutputFormat:
+    XILINX = 1
+    CPU = 2
+
+    class OutputFormatException(Exception):
+        pass
+
+    @classmethod
+    def from_string(self, string):
+        if string == 'xilinx':
+            return OutputFormat.XILINX
+        if string == 'cpu':
+            return OutputFormat.CPU
+        raise self.OutputFormatException("Invalid output format")
+
+
 def parse_r_instruction(instruction_tokens):
     instruction = instruction_tokens[0]
 
@@ -36,7 +52,7 @@ def parse_i_instruction(instruction_tokens):
         return (opcode << 26) + (rs << 21) + (rd << 16) + immediate
 
 
-def assemble(source, nop_count=0):
+def assemble(source, nop_count=0, format=OutputFormat.XILINX):
     program = []
     tail = ['nop'] * nop_count + ['thread_finished']
 
@@ -52,7 +68,16 @@ def assemble(source, nop_count=0):
         if instruction_tokens[-2]:  # Mask
             encoded_instruction += (1 << 31)
 
-        program.append('X"{:08x}", -- {}'.format(encoded_instruction, instruction_tokens[-1]))
+        if format == OutputFormat.XILINX:
+            program.append('X"{:08x}", -- {}'.format(
+                encoded_instruction,
+                instruction_tokens[-1]
+                ))
+        if format == OutputFormat.CPU:
+            program.append('0x{:08x}, // {}'.format(
+                encoded_instruction,
+                instruction_tokens[-1]
+                ))
 
     program[-1] = program[-1].replace(',', '', 1)
     return program
@@ -60,18 +85,24 @@ def assemble(source, nop_count=0):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="MIPS Assembler")
     parser.add_argument(
-        '--hostcomm',
-        dest='hostcomm',
-        action='store_true',
-        help='Will reverse endianness, and produce bare hex output')
-    parser.add_argument(
         '--nop',
         dest='nop_count',
         type=int,
         nargs='?',
         default=0,
         help='How many nops to be appended')
+    parser.add_argument(
+        '--format',
+        dest='format',
+        nargs='?',
+        default='xilinx',
+        help='Choose between Xilinx and CPU output formats')
     args = parser.parse_args()
 
-    program = assemble(stdin, nop_count=args.nop_count)
+    program = assemble(
+        stdin,
+        nop_count=args.nop_count,
+        format=OutputFormat.from_string(args.format)
+        )
+
     print '\n'.join(map(lambda line: line.strip(), program))
