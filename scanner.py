@@ -1,5 +1,5 @@
 from parse import parse
-from utils import get_instruction_format
+from utils import get_instruction_format, register_for_name
 
 
 def parse_r_type(opcode, line):
@@ -34,6 +34,8 @@ def scan(input):
             instruction_tokens = parse_r_type(opcode, bare_line)
         if instruction_format == 'i':
             instruction_tokens = parse_i_type(opcode, bare_line)
+
+        instruction_tokens = map(register_for_name, instruction_tokens)
 
         instructions.append(list(instruction_tokens) + [masked, line])
     return instructions
