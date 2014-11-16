@@ -42,7 +42,6 @@ def assemble(source, nop_count=0):
 
     for instruction_tokens in scan(source) + scan(tail):
         instruction_format = get_instruction_format(instruction_tokens[0])
-        print instruction_tokens[0], instruction_format
 
         encoded_instruction = 0
         if instruction_format == 'i':
