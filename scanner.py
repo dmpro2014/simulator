@@ -22,6 +22,8 @@ def scan(input):
     instructions = []
     for line in input:
         comment_index = line.find(';')
+        if comment_index < 0:
+            comment_index = len(line)
         bare_line = line[0:comment_index].replace('?', '').strip()
         opcode = bare_line.split(" ")[0]
 
