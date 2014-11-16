@@ -1,8 +1,7 @@
 from sys import stdin
 from scanner import scan
 from utils import get_instruction_format, get_funct_code, get_opcode
-
-instructions = scan(stdin)
+import argparse
 
 
 def parse_r_instruction(instruction_tokens):
@@ -36,23 +35,30 @@ def parse_i_instruction(instruction_tokens):
         rd, rs, immediate = map(eval, list(instruction_tokens)[1:4])
         return (opcode << 26) + (rs << 21) + (rd << 16) + immediate
 
-program = []
+def assemble(source):
+  program = []
+  for instruction_tokens in scan(source):
+      instruction_format = get_instruction_format(instruction_tokens[0])
 
-for instruction_tokens in instructions:
-    instruction_format = get_instruction_format(instruction_tokens[0])
+      encoded_instruction = 0
+      if instruction_format == 'i':
+          encoded_instruction = parse_i_instruction(instruction_tokens)
+      if instruction_format == 'r':
+          encoded_instruction = parse_r_instruction(instruction_tokens)
 
-    encoded_instruction = 0
-    if instruction_format == 'i':
-        encoded_instruction = parse_i_instruction(instruction_tokens)
-    if instruction_format == 'r':
-        encoded_instruction = parse_r_instruction(instruction_tokens)
+      if instruction_tokens[-2]:  # Mask
+          encoded_instruction += (1 << 31)
 
-    if instruction_tokens[-2]:  # Mask
-        encoded_instruction += (1 << 31)
-
-    program.append('X"{:08x}", -- {}'.format(encoded_instruction, instruction_tokens[-1]))
+      program.append('X"{:08x}", -- {}'.format(encoded_instruction, instruction_tokens[-1]))
 
 
-program[-1] = program[-1].replace(',', '', 1)
+  program[-1] = program[-1].replace(',', '', 1)
+  return program
 
-print ''.join(program)
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser(description="MIPS Assembler")
+  parser.add_argument('--hostcomm', dest='hostcomm', action='store_true', help='Will reverse endianness, and produce bare hex output')
+  args = parser.parse_args()
+
+  program = assemble(stdin)
+  print ''.join(program)
