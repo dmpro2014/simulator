@@ -49,7 +49,7 @@ def parse_i_instruction(instruction_tokens):
         return (opcode << 26) + (rd << 16) + immediate
     if instruction == 'addi':
         rd, rs, immediate = map(eval, list(instruction_tokens)[1:4])
-        return (opcode << 26) + (rs << 21) + (rd << 16) + immediate
+        return (opcode << 26) + (rs << 21) + (rd << 16) + (immediate % 2**16)
 
 
 def assemble(source, nop_count=0, format=OutputFormat.XILINX):
