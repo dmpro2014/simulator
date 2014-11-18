@@ -54,7 +54,7 @@ def parse_i_instruction(instruction_tokens):
 
 def assemble(source, nop_count=0, format=OutputFormat.XILINX):
     program = []
-    tail = ['nop'] * nop_count + ['thread_finished']
+    tail = ['thread_finished'] + ['nop'] * nop_count
 
     for instruction_tokens in scan(source) + scan(tail):
         instruction_format = get_instruction_format(instruction_tokens[0])
