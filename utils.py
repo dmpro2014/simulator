@@ -13,15 +13,15 @@ instruction_formats = {
     }
 
 funct_codes = {
-    'add': 0x20,
-    'sub': 0x22,
-    'and': 0x24,
-    'or':  0x25,
-    'xor': 0x0d,
-    'slt': 0x2a,
     'sll': 0x00,
     'srl': 0x01,
     'sra': 0x02,
+    'slt': 0x03,
+    'add': 0x04,
+    'sub': 0x05,
+    'and': 0x06,
+    'or':  0x07,
+    'xor': 0x08,
 }
 
 named_registers = {
