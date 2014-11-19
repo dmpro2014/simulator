@@ -31,11 +31,16 @@ def scan(input):
 
         instruction_format = get_instruction_format(opcode)
 
-        instruction_tokens = ['nop']
+        instruction_tokens = None
         if instruction_format == 'r':
             instruction_tokens = parse_r_type(opcode, bare_line)
         if instruction_format == 'i':
             instruction_tokens = parse_i_type(opcode, bare_line)
+        if instruction_format == 'nop':
+            instruction_tokens = ['nop']
+
+        if not instruction_tokens:
+            continue
 
         instruction_tokens = map(register_for_name, instruction_tokens)
 
