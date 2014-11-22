@@ -1,5 +1,6 @@
 opcodes = {
     'addi': 0b00001,
+    'ldi': 0b00001,  # Pseudo instruction
     'ldc': 0b00010,
     'sw': 0b00100,
     'lw': 0b01000,
@@ -7,8 +8,8 @@ opcodes = {
     }
 
 instruction_formats = {
-    'r': ['add', 'sub', 'and', 'or', 'xor', 'slt', 'sll', 'srl', 'sra', 'mul'],
-    'i': ['lw', 'sw', 'ldc', 'addi', 'thread_finished'],
+    'r': ['add', 'sub', 'and', 'or', 'xor', 'slt', 'sll', 'srl', 'sra', 'mv'],
+    'i': ['lw', 'sw', 'ldc', 'addi', 'ldi', 'thread_finished'],
     'nop': ['nop'],
     }
 
@@ -18,6 +19,7 @@ funct_codes = {
     'sra': 0x02,
     'slt': 0x03,
     'add': 0x04,
+    'mv': 0x04,
     'sub': 0x05,
     'and': 0x06,
     'or':  0x07,

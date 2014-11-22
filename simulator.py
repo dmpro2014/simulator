@@ -1,22 +1,14 @@
-from sys import stdin
 from scanner import scan
 from utils import get_instruction_format
 from memory import memory_read, memory_write, memory_dump
 from Tkinter import Tk, Canvas, PhotoImage, mainloop
-
-WIDTH, HEIGHT = 512, 256
-
-constant_memory = [0]*256
-
-instructions = scan(stdin)
-print instructions
-num_threads = WIDTH * HEIGHT
+import argparse
 
 
 def execute_r_instruction(instruction, registers):
     opcode = instruction[0]
 
-    if opcode in ['add', 'sub', 'and', 'or', 'xor', 'mul', 'slt']:
+    if opcode in ['add', 'sub', 'and', 'or', 'xor', 'slt']:
         rd, rs, rt = map(eval, list(instruction)[1:4])
 
         if opcode == 'add':
@@ -32,8 +24,11 @@ def execute_r_instruction(instruction, registers):
         if opcode == 'mul':
             registers[rd] = registers[rs] * registers[rt]
         if opcode == 'slt':
-            # print 'slt', registers[rs], registers[rt]
             registers[rd] = registers[rs] < registers[rt]
+
+    if opcode == 'mv':
+        rd, rs = map(eval, list(instruction)[1:3])
+        registers[rd] = registers[rs]
 
     if opcode in ['sll', 'srl', 'sra']:
         rd, rt, sh = map(eval, list(instruction)[1:4])
@@ -56,6 +51,9 @@ def execute_i_instruction(instruction, registers):
     if opcode == 'ldc':
         rd, immediate = map(eval, list(instruction)[1:3])
         registers[rd] = constant_memory[immediate]
+    if opcode == 'ldi':
+        rd, immediate = map(eval, list(instruction)[1:3])
+        registers[rd] = immediate
     if opcode == 'addi':
         rd, rs, immediate = map(eval, list(instruction)[1:4])
         registers[rd] = registers[rs] + immediate

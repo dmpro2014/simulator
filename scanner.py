@@ -7,12 +7,14 @@ def parse_r_type(opcode, line):
         return parse("{} ${}, ${}, ${}", line)
     if opcode in ['sll', 'srl', 'sra']:
         return parse("{} ${}, ${}, {}", line)
+    if opcode == 'mv':
+        return parse("{} ${}, ${}", line)
 
 
 def parse_i_type(opcode, line):
     if opcode in ['sw', 'lw', 'thread_finished']:
         return [opcode]
-    if opcode == 'ldc':
+    if opcode in ['ldc', 'ldi']:
         return parse("{} ${}, {}", line)
     if opcode == 'addi':
         return parse("{} ${}, ${}, {}", line)
