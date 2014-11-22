@@ -95,7 +95,7 @@ def display():
     canvas.create_image((WIDTH/2, HEIGHT/2), image=img, state="normal")
 
     data = ""
-    for i in range(256):
+    for i in range(HEIGHT):
         data += '{' + ' '.join(map(
             convert_color,
             memory_dump(i*WIDTH, i*WIDTH + WIDTH)
