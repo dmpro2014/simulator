@@ -8,13 +8,15 @@ import argparse
 def execute_r_instruction(instruction, registers):
     opcode = instruction[0]
 
-    if opcode in ['add', 'sub', 'and', 'or', 'xor', 'slt']:
+    if opcode in ['add', 'sub', 'mul', 'and', 'or', 'xor', 'slt', 'seq']:
         rd, rs, rt = map(eval, list(instruction)[1:4])
 
         if opcode == 'add':
             registers[rd] = registers[rs] + registers[rt]
         if opcode == 'sub':
             registers[rd] = registers[rs] - registers[rt]
+        if opcode == 'mul':
+            registers[rd] = registers[rs] * registers[rt]
         if opcode == 'and':
             registers[rd] = registers[rs] & registers[rt]
         if opcode == 'or':
@@ -25,6 +27,8 @@ def execute_r_instruction(instruction, registers):
             registers[rd] = registers[rs] * registers[rt]
         if opcode == 'slt':
             registers[rd] = registers[rs] < registers[rt]
+        if opcode == 'seq':
+            registers[rd] = 1 if registers[rs] == registers[rt] else 0
 
     if opcode == 'mv':
         rd, rs = map(eval, list(instruction)[1:3])

@@ -3,7 +3,7 @@ from utils import get_instruction_format, register_for_name
 
 
 def parse_r_type(opcode, line):
-    if opcode in ['add', 'sub', 'and', 'or', 'xor', 'mul', 'slt']:
+    if opcode in ['add', 'sub', 'mul', 'and', 'or', 'xor', 'slt', 'seq']:
         return parse("{} ${}, ${}, ${}", line)
     if opcode in ['sll', 'srl', 'sra']:
         return parse("{} ${}, ${}, {}", line)

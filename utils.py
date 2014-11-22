@@ -8,7 +8,7 @@ opcodes = {
     }
 
 instruction_formats = {
-    'r': ['add', 'sub', 'and', 'or', 'xor', 'slt', 'sll', 'srl', 'sra', 'mv'],
+    'r': ['add', 'sub', 'and', 'or', 'xor', 'slt', 'sll', 'srl', 'sra', 'mul', 'mv', 'seq'],
     'i': ['lw', 'sw', 'ldc', 'addi', 'ldi', 'thread_finished'],
     'nop': ['nop'],
     }
@@ -24,6 +24,8 @@ funct_codes = {
     'and': 0x06,
     'or':  0x07,
     'xor': 0x08,
+    'mul': 0x09,
+    'seq': 0x10,
 }
 
 named_registers = {

@@ -30,7 +30,7 @@ def parse_r_instruction(instruction_tokens):
         rd, rs = map(eval, list(instruction_tokens)[1:3])
         rt = sh = 0
 
-    if instruction in ['add', 'sub', 'and', 'or', 'xor', 'slt']:
+    if instruction in ['add', 'sub', 'mul', 'and', 'or', 'xor', 'slt', 'seq']:
         rd, rs, rt = map(eval, list(instruction_tokens)[1:4])
         sh = 0
 
