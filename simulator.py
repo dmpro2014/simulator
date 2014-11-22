@@ -59,20 +59,21 @@ def execute_i_instruction(instruction, registers):
         registers[rd] = registers[rs] + immediate
 
 
-for thread_id in range(num_threads):
-    registers = [0] * 16
-    registers[1] = thread_id >> 16
-    registers[2] = thread_id % 2**16
-    for instruction in instructions:
-        if instruction[-2] and registers[6]:  # Mask
-            # print instruction[-1]
-            continue
-        instruction_format = get_instruction_format(instruction[0])
+def start_kernel(instructions, num_threads):
+    for thread_id in range(num_threads):
+        registers = [0] * 16
+        registers[1] = thread_id >> 16
+        registers[2] = thread_id % 2**16
+        for instruction in instructions:
+            if instruction[-2] and (registers[6] & 1):  # Mask
+                # print instruction[-1]
+                continue
+            instruction_format = get_instruction_format(instruction[0])
 
-        if instruction_format == 'i':
-            execute_i_instruction(instruction, registers)
-        if instruction_format == 'r':
-            execute_r_instruction(instruction, registers)
+            if instruction_format == 'i':
+                execute_i_instruction(instruction, registers)
+            if instruction_format == 'r':
+                execute_r_instruction(instruction, registers)
 
 
 def convert_color(color):
@@ -102,6 +103,18 @@ def display():
     img.put(data[:-1])
 
     mainloop()
+
+
+parser = argparse.ArgumentParser(description="Demolicious Simulator")
+parser.add_argument('filename')
+args = parser.parse_args()
+
+with open(args.filename) as kernel:
+    WIDTH, HEIGHT = 512, 256
+
+    constant_memory = [0]*256
+
+    start_kernel(scan(kernel), WIDTH*HEIGHT)
 
 display()
 
