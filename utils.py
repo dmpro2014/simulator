@@ -27,14 +27,16 @@ funct_codes = {
 }
 
 named_registers = {
-        "zero": "0",
-        "id_hi": "1",
-        "id_lo": "2",
-        "address_hi": "3",
-        "address_lo": "4",
-        "lsu_data": "5",
-        "mask": "6",
-        }
+    "zero": "0",
+    "id_hi": "1",
+    "id_lo": "2",
+    "address_hi": "3",
+    "address_lo": "4",
+    "lsu_data": "5",
+    "data": "5",
+    "mask": "6",
+}
+
 
 def get_instruction_format(opcode):
     for key, value in instruction_formats.iteritems():
@@ -49,5 +51,6 @@ def get_funct_code(instruction):
 def get_opcode(instruction):
     return opcodes[instruction]
 
+
 def register_for_name(name):
-  return named_registers.get(name, name)
+    return named_registers.get(name, name)
